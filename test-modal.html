@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <title>Teste Modal</title>
+    <link rel="stylesheet" href="styles/main.css" />
+    <style>
+        body { padding: 50px; }
+        .test-btn { margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Teste de Modal</h1>
+
+    <button class="btn btn-primary test-btn" data-open-modal="teste-gratis">
+        Abrir Modal Teste Grátis
+    </button>
+
+    <button class="btn btn-outline test-btn" data-open-modal="demo">
+        Abrir Modal Demo
+    </button>
+
+    <!-- Modal Teste Grátis -->
+    <div id="modal-teste-gratis" class="modal" aria-hidden="true">
+        <div class="modal-backdrop" data-close-modal></div>
+        <div class="modal-content glass-panel">
+            <button class="modal-close" data-close-modal>×</button>
+            <div class="modal-body">
+                <h2 class="modal-title">Teste Grátis - Modal Funcionando!</h2>
+                <p>Se você está vendo isso, o modal está funcionando corretamente.</p>
+                <button class="btn btn-primary" data-close-modal>Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Demo -->
+    <div id="modal-demo" class="modal" aria-hidden="true">
+        <div class="modal-backdrop" data-close-modal></div>
+        <div class="modal-content glass-panel">
+            <button class="modal-close" data-close-modal>×</button>
+            <div class="modal-body">
+                <h2 class="modal-title">Demo - Modal Funcionando!</h2>
+                <p>Se você está vendo isso, o modal está funcionando corretamente.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Helper functions
+        const qs = (s, el = document) => el.querySelector(s);
+        const qsa = (s, el = document) => [...el.querySelectorAll(s)];
+
+        // Modal handler
+        (() => {
+            const openers = qsa('[data-open-modal]');
+            console.log('Botões encontrados:', openers.length);
+
+            openers.forEach(opener => {
+                const id = opener.getAttribute('data-open-modal');
+                console.log('Registrando botão para modal:', id);
+
+                opener.addEventListener('click', () => {
+                    const modal = qs(`#modal-${id}`);
+                    console.log('Abrindo modal:', id, modal);
+                    if (modal) {
+                        modal.classList.add('show');
+                        console.log('Modal classes:', modal.classList);
+                    }
+                });
+            });
+
+            qsa('[data-close-modal]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const modal = btn.closest('.modal');
+                    console.log('Fechando modal:', modal);
+                    if (modal) modal.classList.remove('show');
+                });
+            });
+
+            console.log('Modal handler inicializado');
+        })();
+    </script>
+</body>
+</html>
