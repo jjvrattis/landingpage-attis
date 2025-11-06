@@ -1,18 +1,26 @@
 // Configuração da API do WhatsApp
-// IMPORTANTE: Substitua os valores abaixo com suas credenciais reais
+// As credenciais são carregadas do arquivo .env
 
-const API_CONFIG = {
-  // URL do servidor da API
+// Valores padrão (fallback caso .env não esteja disponível)
+let API_CONFIG = {
   serverUrl: 'http://localhost:8080',
-
-  // Nome da instância do WhatsApp
   instance: 'TesteGratis',
-
-  // API Key para autenticação
-  // ATENÇÃO: Em produção, NUNCA exponha a API key no frontend
-  // Use um backend intermediário para fazer as chamadas à API
-  apiKey: '1004'
+  apiKey: 'YOUR_API_KEY_HERE' // Será sobrescrito pelo .env
 };
+
+// Carrega variáveis de ambiente
+(async () => {
+  if (typeof window !== 'undefined' && window.loadEnvVariables) {
+    const env = await window.loadEnvVariables();
+    if (env) {
+      API_CONFIG.serverUrl = env.VITE_API_SERVER_URL || API_CONFIG.serverUrl;
+      API_CONFIG.instance = env.VITE_API_INSTANCE || API_CONFIG.instance;
+      API_CONFIG.apiKey = env.VITE_API_KEY || API_CONFIG.apiKey;
+
+      console.log('✅ Configurações carregadas do .env');
+    }
+  }
+})();
 
 // Exporta a configuração (se estiver usando módulos)
 if (typeof module !== 'undefined' && module.exports) {
